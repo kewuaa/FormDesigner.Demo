@@ -27,6 +27,9 @@ namespace Smart.FormDesigner.Demo
             this.propertyWindow.Show(this.dockPanel, DockState.DockRight);
 
             EnableUndoRedo();
+
+            // 启动时新建空表单
+            NewDesignedForm();
         }
 
         private void dockPanel_ActiveDocumentChanged(object sender, EventArgs e)
