@@ -62,7 +62,12 @@ public class Xml2Form {
                 case "DropDownItems":
                     child_type = child.Attribute("type").Value.Split(',')[0];
                     if (child_type == "System.String") {
-                        add_item_code += $"{prefix}{child_element_name}.AddRange(new string[] {{{String.Join(", ", from e in child.Elements() select $"\"{e.Value}\"")}}});" + Environment.NewLine;
+                        add_item_code +=
+        $@"{prefix}{child_element_name}.AddRange(
+            new string[] {{
+                {String.Join($",{Environment.NewLine}                ", from e in child.Elements() select $"\"{e.Value}\"")}
+            }}
+        );" + Environment.NewLine;
                     } else if (child_type == "System.Windows.Forms.ListViewItem") {
                         // TODO: to implement
                     } else {
@@ -77,7 +82,12 @@ public class Xml2Form {
                             children.Add(item);
                             arr[i] = $"this.{item_name}";
                         }
-                        property_code += $"{prefix}Columns.AddRange(new {child_type}[] {{{String.Join(", ", arr)}}});" + Environment.NewLine;
+                        property_code +=
+        $@"{prefix}Columns.AddRange(
+            new {child_type}[] {{
+                {String.Join($",{Environment.NewLine}                ", arr)}
+            }}
+        );" + Environment.NewLine;
                     }
                     break;
                 case "FlatAppearance":
@@ -127,7 +137,14 @@ public class Xml2Form {
                         property_code += ParseColorProperty(child.Value);
                     } else if (property.PropertyType == typeof(Image)) {
                         if (child.Attribute("mode").Value == "binary")
-                            property_code += $"new System.Drawing.Bitmap(new System.IO.MemoryStream(System.Convert.FromBase64String(\"{child.Value}\")))";
+                            property_code +=
+        $@"new System.Drawing.Bitmap(
+            new System.IO.MemoryStream(
+                System.Convert.FromBase64String(
+                    ""{child.Value}""
+                )
+            )
+        )";
                     } else if (class_group.Contains(property.PropertyType)) {
                         property_code += $"new {property.PropertyType.ToString()}({child.Value})";
                     } else {
@@ -184,9 +201,7 @@ $@"public partial class {_root.Attribute("name").Value} {{
 
     #endregion
 
-{_statement_lines}
-}}
-";
+{_statement_lines}}}";
         return code;
     }
 }
