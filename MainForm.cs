@@ -312,6 +312,12 @@ namespace Smart.FormDesigner.Demo
             this.activeDesigner.DeleteSelected();
         }
 
+        private void miShowCode_Click(object sender, System.EventArgs e)
+        {
+            var cs_code = (new Xml2Form(this.activeDesigner.LayoutXML)).GetFormCode();
+            new ShowCodeForm(cs_code).Show();
+        }
+
         private void miCopy_Click(object sender, System.EventArgs e)
         {
             this.activeDesigner.CopyControls();
@@ -378,6 +384,8 @@ namespace Smart.FormDesigner.Demo
             this.miCopy = new System.Windows.Forms.MenuItem();
             this.miPaste = new System.Windows.Forms.MenuItem();
             this.miDeleteSelection = new System.Windows.Forms.MenuItem();
+            this.menuItem15 = new System.Windows.Forms.MenuItem();
+            this.miShowCode = new System.Windows.Forms.MenuItem();
             this.menuItem4 = new System.Windows.Forms.MenuItem();
             this.miAbout = new System.Windows.Forms.MenuItem();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
@@ -468,7 +476,9 @@ namespace Smart.FormDesigner.Demo
             this.menuItem14,
             this.miCopy,
             this.miPaste,
-            this.miDeleteSelection});
+            this.miDeleteSelection,
+            this.menuItem15,
+            this.miShowCode});
             this.menuItem2.Text = "编辑(&E)";
             // 
             // miUndo
@@ -602,6 +612,18 @@ namespace Smart.FormDesigner.Demo
             this.miDeleteSelection.Shortcut = System.Windows.Forms.Shortcut.Del;
             this.miDeleteSelection.Text = "删除(&D)";
             this.miDeleteSelection.Click += new System.EventHandler(this.miDeleteSelection_Click);
+            // 
+            // menuItem15
+            // 
+            this.menuItem15.Index = 9;
+            this.menuItem15.Text = "-";
+            // 
+            // miShowCode
+            // 
+            this.miShowCode.Index = 10;
+            this.miShowCode.Shortcut = System.Windows.Forms.Shortcut.F6;
+            this.miShowCode.Text = "转换为CS代码";
+            this.miShowCode.Click += new System.EventHandler(this.miShowCode_Click);
             // 
             // menuItem4
             // 
@@ -900,6 +922,7 @@ namespace Smart.FormDesigner.Demo
         private MenuItem miSameWidth;
         private MenuItem miSameBoth;
         private MenuItem miDeleteSelection;
+        private MenuItem miShowCode;
         private MenuItem miAbout;
         private MenuItem menuItem1;
         private MenuItem menuItem2;
@@ -911,6 +934,7 @@ namespace Smart.FormDesigner.Demo
         private MenuItem menuItem12;
         private MenuItem menuItem13;
         private MenuItem menuItem14;
+        private MenuItem menuItem15;
 
         private ToolStrip toolStrip;
         private ToolStripButton tbNewForm;
