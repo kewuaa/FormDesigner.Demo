@@ -83,7 +83,7 @@ public class Xml2Form {
                             arr[i] = $"this.{item_name}";
                         }
                         property_code +=
-        $@"{prefix}Columns.AddRange(
+        $@"{prefix}{child_element_name}.AddRange(
             new {child_type}[] {{
                 {String.Join($",{Environment.NewLine}                ", arr)}
             }}
@@ -145,6 +145,8 @@ public class Xml2Form {
                 )
             )
         )";
+                    } else if (property.PropertyType == typeof(Cursor)) {
+                        property_code += $"System.Windows.Forms.Cursors.{child.Value}";
                     } else if (class_group.Contains(property.PropertyType)) {
                         property_code += $"new {property.PropertyType.ToString()}({child.Value})";
                     } else {
@@ -169,7 +171,7 @@ public class Xml2Form {
     public string GetFormCode() {
         var main_block = ParseElement(_root);
         var code =
-$@"public partial class {_root.Attribute("name").Value} {{
+$@"public partial class {_root.Attribute("name").Value}: System.Windows.Forms.Form {{
     /// <summary>
     /// Required designer variable.
     /// </summary>
@@ -194,9 +196,9 @@ $@"public partial class {_root.Attribute("name").Value} {{
     /// </summary>
     private void InitializeComponent() {{
 {_initialize_lines}
-        self.SuspendLayout();
+        this.SuspendLayout();
 {main_block}
-        self.ResumeLayout(false);
+        this.ResumeLayout(false);
     }}
 
     #endregion
