@@ -86,8 +86,7 @@ public class ShowCodeForm: Form
     }
 
     private void SaveButton_Click(object sender, EventArgs e) {
-        var dialog = new OpenFileDialog();
-        dialog.Multiselect = false;
+        var dialog = new SaveFileDialog();
         dialog.Title = "选择需要保存的文件";
         dialog.Filter = "cs文件(*.cs)|*.*";
         if (dialog.ShowDialog() == DialogResult.OK) {
