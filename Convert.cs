@@ -174,10 +174,6 @@ public class Xml2Form {
                     }
                     break;
                 }
-                case "ContextMenuStrip": {
-                    property_code += $"{prefix}ContextMenuStrip = this.{child.Value};" + Environment.NewLine;
-                    break;
-                }
                 default: {
                     var property = Type.GetType(root_type).GetProperty(child_element_name);
                     if (property == null) {
@@ -213,6 +209,8 @@ public class Xml2Form {
         )";
                     } else if (property.PropertyType == typeof(Cursor)) {
                         property_code += $"System.Windows.Forms.Cursors.{child.Value}";
+                    } else if (property.PropertyType == typeof(ContextMenuStrip)) {
+                        property_code += $"this.{child.Value}";
                     } else if (class_group.Contains(property.PropertyType)) {
                         property_code += $"new {property.PropertyType.ToString()}({child.Value})";
                     } else {
