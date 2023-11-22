@@ -75,7 +75,8 @@ public class Xml2Form {
                 case "Object": {
                     var child_name = child.Attribute("name").Value;
                     var child_type = child.Attribute("type").Value.Split(',')[0];
-                    add_child_code += $"{prefix}Controls.Add(this.{child.Element("Name").Value});" + Environment.NewLine;
+                    var row_col_params = root_type.Contains("TableLayoutPanel") ? $", {child.Element("Row").Value}, {child.Element("Column").Value}" : "";
+                    add_child_code += $"{prefix}Controls.Add(this.{child.Element("Name").Value}{row_col_params});" + Environment.NewLine;
                     InitializeComponent(child_type, child_name);
                     child_code += ParseXml(child);
                     break;
@@ -166,14 +167,12 @@ public class Xml2Form {
                 case "RowStyles":
                 case "ColumnStyles": {
                     var child_type = child.Attribute("type").Value.Split(',')[0];
-                    var items = child.Elements().ToArray();
-                    for (int i = 0; i < items.Length; i++) {
-                        var item = items[i];
+                    foreach (var item in child.Elements()) {
                         if (item.Element("type") != null) {
-                            property_code += $"{prefix}{child_element_name}[{i}].SizeType = System.Windows.Forms.SizeType.AutoSize;" + Environment.NewLine;
+                            property_code += $"{prefix}{child_element_name}.Add(new {child_type}(System.Windows.Forms.SizeType.AutoSize));" + Environment.NewLine;
                         } else {
                             var parameters = (from e in item.Elements("Param") select e.Value).ToArray();
-                            property_code += $"{prefix}{child_element_name}[{i}] = new {child_type}(System.Windows.Forms.SizeType.{parameters[0]}, {parameters[1]}F);" + Environment.NewLine;
+                            property_code += $"{prefix}{child_element_name}.Add(new {child_type}(System.Windows.Forms.SizeType.{parameters[0]}, {parameters[1]}F));" + Environment.NewLine;
                         }
                     }
                     break;
