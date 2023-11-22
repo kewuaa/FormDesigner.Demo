@@ -173,7 +173,7 @@ public class Xml2Form {
                             property_code += $"{prefix}{child_element_name}[{i}].SizeType = System.Windows.Forms.SizeType.AutoSize;" + Environment.NewLine;
                         } else {
                             var parameters = (from e in item.Elements("Param") select e.Value).ToArray();
-                            property_code += $"{prefix}{child_element_name}[{i}] = new {child_type}(System.Windows.Forms.SizeType.{parameters[0]}, {parameters[1]});" + Environment.NewLine;
+                            property_code += $"{prefix}{child_element_name}[{i}] = new {child_type}(System.Windows.Forms.SizeType.{parameters[0]}, {parameters[1]}F);" + Environment.NewLine;
                         }
                     }
                     break;
