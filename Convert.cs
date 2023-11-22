@@ -163,6 +163,21 @@ public class Xml2Form {
                     // TODO: to implement
                     break;
                 }
+                case "RowStyles":
+                case "ColumnStyles": {
+                    var child_type = child.Attribute("type").Value.Split(',')[0];
+                    var items = child.Elements().ToArray();
+                    for (int i = 0; i < items.Length; i++) {
+                        var item = items[i];
+                        if (item.Element("type") != null) {
+                            property_code += $"{prefix}{child_element_name}[{i}].SizeType = System.Windows.Forms.SizeType.AutoSize;" + Environment.NewLine;
+                        } else {
+                            var parameters = (from e in item.Elements("Param") select e.Value).ToArray();
+                            property_code += $"{prefix}{child_element_name}[{i}] = new {child_type}(System.Windows.Forms.SizeType.{parameters[0]}, {parameters[1]});" + Environment.NewLine;
+                        }
+                    }
+                    break;
+                }
                 case "FlatAppearance":{
                     foreach (var p in child.Element("Object").Elements()) {
                         var p_name = p.Name.ToString();
