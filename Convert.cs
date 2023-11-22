@@ -75,8 +75,8 @@ public class Xml2Form {
                 case "Object": {
                     var child_name = child.Attribute("name").Value;
                     var child_type = child.Attribute("type").Value.Split(',')[0];
-                    var row_col_params = root_type.Contains("TableLayoutPanel") ? $", {child.Element("Row").Value}, {child.Element("Column").Value}" : "";
-                    add_child_code += $"{prefix}Controls.Add(this.{child.Element("Name").Value}{row_col_params});" + Environment.NewLine;
+                    var col_row_params = root_type.Contains("TableLayoutPanel") ? $", {child.Element("Column").Value}, {child.Element("Row").Value}" : "";
+                    add_child_code += $"{prefix}Controls.Add(this.{child.Element("Name").Value}{col_row_params});" + Environment.NewLine;
                     InitializeComponent(child_type, child_name);
                     child_code += ParseXml(child);
                     break;
