@@ -223,6 +223,9 @@ public class Xml2Form {
         )";
                     } else if (property.PropertyType == typeof(Cursor)) {
                         property_code += $"System.Windows.Forms.Cursors.{child.Value}";
+                    } else if (property.PropertyType == typeof(AnchorStyles)) {
+                        var styles = (from style in child.Value.Split(',') select style.TrimStart());
+                        property_code += String.Join(" | ", from style in styles select $"System.Windows.Forms.AnchorStyles.{style}");
                     } else if (property.PropertyType == typeof(ContextMenuStrip)) {
                         InitializeComponent(property.PropertyType.ToString(), child.Value);
                         property_code += $"this.{child.Value}";
