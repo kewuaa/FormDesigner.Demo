@@ -224,6 +224,7 @@ public class Xml2Form {
                     } else if (property.PropertyType == typeof(Cursor)) {
                         property_code += $"System.Windows.Forms.Cursors.{child.Value}";
                     } else if (property.PropertyType == typeof(ContextMenuStrip)) {
+                        InitializeComponent(property.PropertyType.ToString(), child.Value);
                         property_code += $"this.{child.Value}";
                     } else if (class_group.Contains(property.PropertyType)) {
                         property_code += $"new {property.PropertyType.ToString()}({child.Value})";
